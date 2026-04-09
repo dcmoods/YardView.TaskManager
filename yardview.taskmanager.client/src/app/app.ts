@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   standalone: false,
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'], 
 })
 export class App implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+  public forecasts: WeatherForecast[] | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.getForecasts();
@@ -19,7 +19,9 @@ export class App implements OnInit {
   getForecasts() {
     this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
       (result) => {
+        console.log(result)
         this.forecasts = result;
+        this.cd.detectChanges();
       },
       (error) => {
         console.error(error);
@@ -28,4 +30,12 @@ export class App implements OnInit {
   }
 
   protected readonly title = signal('yardview.taskmanager.client');
+}
+
+
+interface WeatherForecast {
+  date: Date;
+  temperatureC: number;
+  temperatureF: number;
+  summary: string;
 }
