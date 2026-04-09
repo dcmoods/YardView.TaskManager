@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="yardview.taskmanager.client/yardview.taskmanager.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="YardView.TaskManager.Server/YardView.TaskManager.Server.csproj" />
+</Solution>

@@ -1,0 +1,6 @@
+@YardView.TaskManager.Server_HostAddress = http://localhost:5235
+
+GET {{YardView.TaskManager.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
