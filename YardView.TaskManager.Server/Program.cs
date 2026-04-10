@@ -1,10 +1,12 @@
+using FluentValidation;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using YardView.TaskManager.Server.Data;
+using YardView.TaskManager.Server.Data.Extensions;
 using YardView.TaskManager.Server.Endpoints;
-using YardView.TaskManager.Server.Extensions;
 using YardView.TaskManager.Server.Services;
+using YardView.TaskManager.Server.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +24,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.BuildConnectionString(false));
 });
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateTaskRequestValidator>();
+
 builder.Services.AddScoped<ITaskService, TaskService>();
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo 
@@ -44,17 +49,13 @@ if (app.Environment.IsDevelopment())
     await app.InitializeDatabaseAsync();
     
     app.MapOpenApi();
-
-
 }
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    // UI will be available at /swagger
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Task Manager API V1");
     options.RoutePrefix = "swagger";
-    // optional: collapse schema models by default
     options.DefaultModelsExpandDepth(-1);
 });
 
@@ -65,6 +66,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapTaskEndpoints();
+app.MapTaskStatusEndpoints();
 
 app.MapFallbackToFile("/index.html");
 

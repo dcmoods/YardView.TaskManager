@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using YardView.TaskManager.Api.Mapping;
 using YardView.TaskManager.Server.Contracts.Tasks;
 using YardView.TaskManager.Server.Data;
-using YardView.TaskManager.Server.Extensions;
 
 namespace YardView.TaskManager.Server.Services;
 
@@ -28,11 +28,8 @@ public class TaskService : ITaskService
 
         if (!string.IsNullOrEmpty(status))
         {
-            var enumStatus = status.ToEnum<Models.TaskStatus>();
-            if (enumStatus.HasValue)
-            {
-                query = query.Where(t => t.Status == enumStatus.Value);
-            }
+            var enumStatus = TaskStatusMapper.ToEnum(status);
+            query = query.Where(t => t.Status == enumStatus);
         }
 
         return await query.Select(t => new TaskResponse
@@ -40,7 +37,7 @@ public class TaskService : ITaskService
             Id = t.Id,
             Title = t.Title,
             Description = t.Description,
-            Status = t.Status.ToString(),
+            Status = TaskStatusMapper.ToApiValue(t.Status),
             CreatedAt = t.CreatedAt
         }).ToListAsync(cancellationToken);
 
@@ -54,7 +51,7 @@ public class TaskService : ITaskService
             Id = task.Id,
             Title = task.Title,
             Description = task.Description,
-            Status = task.Status.ToString(),
+            Status = TaskStatusMapper.ToApiValue(task.Status),
             CreatedAt = task.CreatedAt
         };
     }
@@ -65,7 +62,7 @@ public class TaskService : ITaskService
         {
             Title = request.Title,
             Description = request.Description,
-            Status = request.Status.ToEnum<Models.TaskStatus>() ?? Models.TaskStatus.Todo,
+            Status = TaskStatusMapper.ToEnum(request.Status),
             CreatedAt = DateTime.UtcNow
         };
         
@@ -92,7 +89,7 @@ public class TaskService : ITaskService
         }
 
         task.Title = request.Title;
-        task.Status = request.Status.ToEnum<Models.TaskStatus>() ?? task.Status;
+        task.Status = TaskStatusMapper.ToEnum(request.Status);
         task.Description = request.Description;
 
         await _dbContext.SaveChangesAsync(cancellationToken);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using YardView.TaskManager.Server.Data;
 
-namespace YardView.TaskManager.Server.Extensions;
+namespace YardView.TaskManager.Server.Data.Extensions;
 
 public static class DbExtensions
 {
