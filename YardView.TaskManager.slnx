@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/tests/">
+    <Project Path="YardView.TaskManager.Server.Tests/YardView.TaskManager.Server.Tests.csproj" />
+  </Folder>
   <Project Path="yardview.taskmanager.client/yardview.taskmanager.client.esproj">
     <Build />
     <Deploy />
