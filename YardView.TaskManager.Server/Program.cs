@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using YardView.TaskManager.Server.Data;
 using YardView.TaskManager.Server.Extensions;
+using YardView.TaskManager.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.BuildConnectionString(false));
 });
+
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 var app = builder.Build();
 
