@@ -1,0 +1,30 @@
+<section class="min-h-screen bg-slate-50 flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+
+      <div>
+        <p class="text-xs font-semibold uppercase text-slate-500 tracking-wide">
+          YardView
+        </p>
+        <h1 class="text-lg font-bold text-slate-900">
+          Task Manager
+        </h1>
+      </div>
+
+      <div class="text-sm text-slate-500">
+        Demo App
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <app-container class="flex-1">
+    <router-outlet />
+  </app-container>
+
+
+  <app-toast />
+</section>

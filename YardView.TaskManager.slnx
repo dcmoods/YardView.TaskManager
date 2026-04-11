@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="YardView.TaskManager.Server/YardView.TaskManager.Server.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="YardView.TaskManager.Server.Tests/YardView.TaskManager.Server.Tests.csproj" />
   </Folder>
@@ -6,5 +9,4 @@
     <Build />
     <Deploy />
   </Project>
-  <Project Path="YardView.TaskManager.Server/YardView.TaskManager.Server.csproj" />
 </Solution>

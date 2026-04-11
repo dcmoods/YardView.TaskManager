@@ -1,0 +1,58 @@
+<section class="min-h-screen bg-slate-50 py-8 px-4">
+  <div class="max-w-3xl mx-auto space-y-6">
+
+    <header>
+      <p class="text-xs font-semibold uppercase text-slate-500">YardView</p>
+      <h1 class="text-3xl font-bold text-slate-900">Task Manager</h1>
+      <p class="text-slate-600 text-sm mt-1">
+        Create, update, and manage tasks
+      </p>
+    </header>
+
+    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+      
+      @if (createError) {
+        <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ createError }}
+        </div>
+      }
+      
+      <app-task-form
+        [isSaving]="isCreating"
+        (createTask)="onCreateTask($event)" />
+    </div>
+
+    <div class="flex justify-between items-center bg-white border rounded-xl p-4 shadow-sm">
+      <label class="text-sm font-medium text-slate-700">Filter</label>
+
+      <select
+        class="border rounded-md px-3 py-2 text-sm"
+        [value]="selectedStatus"
+        (change)="onFilterChange($any($event.target).value)">
+        <option value="all">All</option>
+        <option value="todo">Todo</option>
+        <option value="in_progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
+
+    @if (tasks$ | async; as tasks) {
+      <app-task-list 
+          [tasks]="tasks"
+          (statusChange)="onStatusChange($event)"
+          (deleteTask)="openDeleteDialog($event)" />
+    }
+
+  </div>
+</section>
+
+
+@if (taskPendingDelete; as task) {
+  <app-confirm-dialog
+    title="Delete task"
+    [message]="'Are you sure you want to delete &quot;' + task.title + '&quot;?'"
+    confirmText="Delete"
+    cancelText="Cancel"
+    (confirmed)="confirmDelete()"
+    (cancelled)="closeDeleteDialog()" />
+}

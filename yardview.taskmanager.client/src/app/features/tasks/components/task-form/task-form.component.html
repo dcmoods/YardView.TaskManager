@@ -1,0 +1,106 @@
+<form class="space-y-5" (ngSubmit)="submit(taskForm)" #taskForm="ngForm">
+  <div>
+    <h2 class="text-lg font-semibold text-slate-900">
+      Create Task
+    </h2>
+    <p class="mt-1 text-sm text-slate-500">
+      Add a new task to your list.
+    </p>
+  </div>
+
+  <div class="space-y-2">
+    <label for="title" class="block text-sm font-medium text-slate-700">
+      Title
+    </label>
+
+    <input
+      id="title"
+      name="title"
+      type="text"
+      [(ngModel)]="title"
+      maxlength="200"
+      required
+      #titleCtrl="ngModel"
+      placeholder="Enter a task title"
+      class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 shadow-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" 
+      [class.border-slate-300]="!(taskForm.submitted && titleCtrl.invalid)"
+      [class.focus:border-blue-400]="!(taskForm.submitted && titleCtrl.invalid)"
+      [class.focus:ring-2]="!(taskForm.submitted && titleCtrl.invalid)"
+      [class.focus:ring-blue-100]="!(taskForm.submitted && titleCtrl.invalid)"
+      [class.border-red-300]="taskForm.submitted && titleCtrl.invalid"
+      [class.bg-red-50]="taskForm.submitted && titleCtrl.invalid"
+      [class.focus:border-red-400]="taskForm.submitted && titleCtrl.invalid"
+      [class.focus:ring-2]="taskForm.submitted && titleCtrl.invalid"
+      [class.focus:ring-red-100]="taskForm.submitted && titleCtrl.invalid" />
+
+      @if (titleCtrl.invalid && titleCtrl.touched) {
+        <p class="text-xs text-red-600">
+          Title is required.
+        </p>
+      }
+  </div>
+
+  <div class="space-y-2">
+    <label for="description" class="block text-sm font-medium text-slate-700">
+      Description
+    </label>
+
+    <textarea
+      id="description"
+      name="description"
+      [(ngModel)]="description"
+      rows="4"
+      #descriptionCtrl="ngModel"
+      maxlength="1000"
+      placeholder="Optional description"
+      class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 shadow-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"></textarea>
+     
+      @if (taskForm.submitted && descriptionCtrl.errors?.['maxlength']) {
+        <p class="text-sm text-red-600">
+          Description must be 1000 characters or fewer.
+        </p>
+      }
+  </div>
+
+  <div class="space-y-2">
+    <label for="status" class="block text-sm font-medium text-slate-700">
+      Status
+    </label>
+
+    <select
+      id="status"
+      name="status"
+      [(ngModel)]="status"
+      required
+      #statusCtrl="ngModel"
+      class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+      [class.border-slate-300]="!(taskForm.submitted && statusCtrl.invalid)"
+      [class.focus:border-blue-400]="!(taskForm.submitted && statusCtrl.invalid)"
+      [class.focus:ring-2]="!(taskForm.submitted && statusCtrl.invalid)"
+      [class.focus:ring-blue-100]="!(taskForm.submitted && statusCtrl.invalid)"
+      [class.border-red-300]="taskForm.submitted && statusCtrl.invalid"
+      [class.bg-red-50]="taskForm.submitted && statusCtrl.invalid"
+      [class.focus:border-red-400]="taskForm.submitted && statusCtrl.invalid"
+      [class.focus:ring-2]="taskForm.submitted && statusCtrl.invalid"
+      [class.focus:ring-red-100]="taskForm.submitted && statusCtrl.invalid">
+      <option value="todo">Todo</option>
+      <option value="in_progress">In Progress</option>
+      <option value="done">Done</option>
+    </select>
+
+    @if (taskForm.submitted && statusCtrl.invalid) {
+      <p class="text-xs text-red-600">
+        Status is required.
+      </p>
+    }
+  </div>
+
+  <div class="flex justify-end pt-2">
+    <button
+      type="submit"
+      [disabled]="isSaving" 
+      class="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60">
+      {{ isSaving ? 'Creating...' : 'Create Task' }}
+    </button>
+  </div>
+</form>

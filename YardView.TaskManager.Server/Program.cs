@@ -10,6 +10,17 @@ using YardView.TaskManager.Server.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins("https://localhost:64860")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
@@ -64,6 +75,8 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("Frontend");
 
 app.MapTaskEndpoints();
 app.MapTaskStatusEndpoints();

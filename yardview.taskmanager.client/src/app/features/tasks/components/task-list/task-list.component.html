@@ -1,0 +1,66 @@
+<div class="space-y-4">
+
+  @for (task of tasks; track trackById($index, task)) {
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+
+      <!-- Top -->
+      <div class="flex justify-between items-start gap-4">
+
+        <div class="text-left">
+          <h3 class="font-semibold text-slate-900">
+            {{ task.title }}
+          </h3>
+
+          @if (task.description) {
+            <p class="text-sm text-slate-600 mt-1">
+              {{ task.description }}
+            </p>
+          }
+        </div>
+
+         <div class="relative">
+          <select
+            class="appearance-none text-xs font-semibold px-4 py-1.5 pr-8 rounded-full border shadow-sm cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2"
+            
+            [ngClass]="[
+              getStatusClasses(task.status),
+              recentlyUpdated.has(task.id)
+                ? 'scale-105 ring-2 ring-blue-200'
+                : ''
+            ]"
+
+            [value]="task.status"
+            (change)="onStatusChanged(task, $any($event.target).value)"
+          >
+            <option value="todo">Todo</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+
+          <!-- Chevron -->
+          <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">
+            ▼
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-between items-center mt-4 gap-4">
+        <div class="text-xs text-slate-500 mt-2">
+          Created {{ task.createdAt | date: 'short' }}
+        </div>
+        <button
+          type="button"
+          class="text-sm font-medium text-red-600 hover:text-red-800"
+          (click)="deleteTask.emit(task)">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+  }
+
+</div>
