@@ -8,7 +8,7 @@ import { CreateTaskRequest } from '../../../../core/services/task-api.service';
 
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule ],
   templateUrl: './task-form.component.html',
   standalone: true,
 })

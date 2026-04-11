@@ -1,6 +1,7 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ToastService } from '../../../core/services/toast.service';
 
 
 export type ToastType = 'success' | 'error' | 'info';
@@ -18,43 +19,6 @@ export interface ToastMessage {
   imports: [AsyncPipe, NgClass]
 })
 export class ToastComponent {
-
-  private readonly toastSubject = new BehaviorSubject<ToastMessage | null>(null);
-  readonly toast$ = this.toastSubject.asObservable();
-
-  private timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-  show(message: string, type: ToastType = 'info'): void {
-    this.toastSubject.next({ message, type });
-
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
-
-    this.timeoutId = setTimeout(() => {
-      this.clear();
-    }, 3000);
-  }
-
-  clear(): void {
-    this.toastSubject.next(null);
-
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-      this.timeoutId = null;
-    }
-  }
-
-  success(message: string): void {
-    this.show(message, 'success');
-  }
-
-  error(message: string): void {
-    this.show(message, 'error');
-  }
-
-  info(message: string): void {
-    this.show(message, 'info');
-  }
-
+  readonly toastService = inject(ToastService);
+  readonly toast$ = this.toastService.toast$;
 }

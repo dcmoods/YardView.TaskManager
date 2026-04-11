@@ -6,17 +6,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
 import { AsyncPipe } from '@angular/common';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-task-page',
   standalone: true,
   templateUrl: './task-page.component.html',
-  styleUrl: './task-page.component.css',
   imports: [ TaskListComponent, ConfirmDialogComponent, AsyncPipe, TaskFormComponent ],
 })
 export class TaskPageComponent implements OnInit {
   
   private readonly taskService = inject(TaskApiService);
+  private readonly toastService = inject(ToastService);
 
   @ViewChild(TaskFormComponent) taskFormComponent?: TaskFormComponent;
   
@@ -51,10 +52,12 @@ export class TaskPageComponent implements OnInit {
       next: () => {
         this.isCreating = false;
         this.taskFormComponent?.resetForm();
+        this.toastService.success('Task created successfully!');
       },
       error: () => {
         this.isCreating = false;
         this.createError = 'Failed to create task.';
+        this.toastService.error('Failed to create task.');
       },
     });
   }
@@ -66,7 +69,16 @@ export class TaskPageComponent implements OnInit {
         description: event.task.description,
         status: event.status,
       })
-      .subscribe();
+      .subscribe(
+        {
+          next: () => {
+            this.toastService.success('Task updated successfully!');
+          },
+          error: () => {
+            this.toastService.error('Failed to update task.');
+          },
+        }
+      );
   }
 
   openDeleteDialog(task: Task): void {
@@ -86,6 +98,10 @@ export class TaskPageComponent implements OnInit {
     this.taskService.deleteTask(this.taskPendingDelete.id).subscribe({
       next: () => {
         this.closeDeleteDialog();
+        this.toastService.success('Task deleted successfully!');
+      },
+      error: () => {
+        this.toastService.error('Failed to delete task.');
       },
     });
   }
