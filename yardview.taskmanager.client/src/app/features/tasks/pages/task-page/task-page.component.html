@@ -1,14 +1,6 @@
 <section class="min-h-screen bg-slate-50 py-8 px-4">
   <div class="max-w-3xl mx-auto space-y-6">
 
-    <header>
-      <p class="text-xs font-semibold uppercase text-slate-500">YardView</p>
-      <h1 class="text-3xl font-bold text-slate-900">Task Manager</h1>
-      <p class="text-slate-600 text-sm mt-1">
-        Create, update, and manage tasks
-      </p>
-    </header>
-
     <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex justify-between items-center">
       <div class="flex items-center gap-2">
       <label class="text-sm font-medium text-slate-700">
@@ -31,6 +23,7 @@
       class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
       (click)="openCreateForm()"
       [disabled]="showCreateForm">
+      <i class="bi bi-plus-lg text-sm"></i>
       New Task
     </button>
   </div>
@@ -63,14 +56,13 @@
             No tasks found.
           </div>
         } @else {
-          <app-task-list
-            [tasks]="tasks"
-            (statusChange)="onStatusChange($event)"
-            (deleteTask)="openDeleteDialog($event)" />
+      
+              <app-task-list
+                [tasks]="tasks"
+                (statusChange)="onStatusChange($event)"
+                (deleteTask)="openDeleteDialog($event)" />
         }
       }
-
-
   </div>
 </section>
 

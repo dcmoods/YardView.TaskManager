@@ -13,12 +13,14 @@ export interface CreateTaskRequest {
   title: string;
   description?: string;
   status: TaskStatus;
+  dueDate: Date | string | null;
 }
 
 export interface UpdateTaskRequest {
   title: string;
   description?: string;
   status: TaskStatus;
+  dueDate: Date | string | null;
 }
 
 @Injectable({

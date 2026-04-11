@@ -81,6 +81,7 @@ export class TaskPageComponent implements OnInit {
         title: event.task.title,
         description: event.task.description,
         status: event.status,
+        dueDate: event.task.dueDate || new Date().toISOString(),
       })
       .subscribe(
         {

@@ -1,7 +1,9 @@
 <div class="space-y-4">
 
   @for (task of tasks; track trackById($index, task)) {
-    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <div class="bg-white border rounded-xl p-4 shadow-sm"
+      [class.border-red-300]="isPastDue(task)"
+      [class.bg-red-50]="isPastDue(task)">
 
       <!-- Top -->
       <div class="flex justify-between items-start gap-4">
@@ -11,8 +13,17 @@
             {{ task.title }}
           </h3>
 
+          @if (task.dueDate) {
+            <p class="text-xs font-medium mt-1"
+               [class.text-red-700]="isPastDue(task)"
+               [class.text-slate-500]="!isPastDue(task)">
+               <i class="bi bi-calendar3"></i>
+              Due {{ task.dueDate | date: 'mediumDate' }}
+            </p>
+          }
+
           @if (task.description) {
-            <p class="text-sm text-slate-600 mt-1">
+            <p class="text-sm text-slate-600 mt-3">
               {{ task.description }}
             </p>
           }
@@ -39,7 +50,7 @@
 
           <!-- Chevron -->
           <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 text-xs">
-            ▼
+            <i class="bi bi-chevron-down text-xs font-bold"></i>
           </span>
 
         </div>
@@ -53,9 +64,9 @@
         </div>
         <button
           type="button"
-          class="text-sm font-medium text-red-600 hover:text-red-800"
+          class="text-sm font-medium text-red-600 hover:text-red-800 hover:cursor-pointer transition"
           (click)="deleteTask.emit(task)">
-          Delete
+          <i class="bi bi-trash text-lg "></i>
         </button>
 
       </div>

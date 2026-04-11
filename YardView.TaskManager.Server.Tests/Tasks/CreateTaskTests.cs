@@ -70,4 +70,29 @@ public class CreateTaskTests
         Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CreateTask_ReturnsCreated_WhenDueDateValid()
+    {
+        var client = _factory.CreateClient();
+
+        var request = new
+        {
+            Title = "Test Task",
+            Description = "This task has a valid due date.",
+            DueDate = DateTime.UtcNow.AddDays(7)
+        };
+
+        var response = await client.PostAsJsonAsync("/tasks", request);
+
+        Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
+
+        var createdTask = await response.Content.ReadFromJsonAsync<TaskResponse>();
+
+        Assert.NotNull(createdTask);
+        Assert.Equal(request.Title, createdTask.Title);
+        Assert.Equal(request.Description, createdTask.Description);
+        Assert.Equal(request.DueDate, createdTask.DueDate);
+
+    }
+
 }

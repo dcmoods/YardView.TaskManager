@@ -23,6 +23,7 @@ export class TaskFormComponent {
   title = '';
   description = '';
   status: TaskStatus = 'todo';
+  dueDate: Date | null = null;
 
   submit(form: NgForm): void {
     if (form.invalid) {
@@ -33,11 +34,12 @@ export class TaskFormComponent {
     if (!this.title.trim()) {
       return;
     }
-
+    console.log(this.dueDate)
     this.createTask.emit({
       title: this.title.trim(),
       description: this.description.trim() || undefined,
       status: this.status,
+      dueDate: this.dueDate ? this.dueDate : null,
     });
   }
 

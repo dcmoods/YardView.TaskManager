@@ -4,6 +4,7 @@ export interface Task {
   description?: string;
   status: 'todo' | 'in_progress' | 'done';
   createdAt: string;
+  dueDate?: string | null;
 }
 
 export type TaskStatus = 'todo' | 'in_progress' | 'done';

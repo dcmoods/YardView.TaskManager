@@ -57,4 +57,14 @@ export class TaskListComponent {
         return 'bg-green-100 text-green-700 border-green-200 focus:ring-green-200';
     }
   }
+
+  isPastDue(task: Task): boolean {
+    if (!task.dueDate || task.status === 'done') {
+      return false;
+    }
+
+    const due = new Date(task.dueDate);
+    const now = new Date();
+    return !Number.isNaN(due.getTime()) && due < now;
+  }
 }
