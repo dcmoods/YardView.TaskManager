@@ -4,6 +4,9 @@ using TaskStatus = YardView.TaskManager.Server.Models.TaskStatus;
 namespace YardView.TaskManager.Api.Mapping;
 public static class TaskStatusMapper
 {
+    public static bool IsValid(string status) =>
+        status is "todo" or "in_progress" or "done";
+
     public static TaskStatus ToEnum(string status) => status.ToLowerInvariant() switch
     {
         "todo" => TaskStatus.Todo,

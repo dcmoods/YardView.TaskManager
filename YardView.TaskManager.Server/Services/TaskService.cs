@@ -77,7 +77,7 @@ public class TaskService : ITaskService
             Id = task.Id,
             Title = task.Title,
             Description = task.Description,
-            Status = task.Status.ToString(),
+            Status = TaskStatusMapper.ToApiValue(task.Status),
             CreatedAt = task.CreatedAt,
             DueDate = task.DueDate,
         };
@@ -104,7 +104,7 @@ public class TaskService : ITaskService
             Id = task.Id,
             Title = task.Title,
             Description = task.Description,
-            Status = task.Status.ToString(),
+            Status = TaskStatusMapper.ToApiValue(task.Status),
             CreatedAt = task.CreatedAt,
             DueDate = task.DueDate,
         };

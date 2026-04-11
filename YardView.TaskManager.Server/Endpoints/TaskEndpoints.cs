@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System.ComponentModel.DataAnnotations;
+using YardView.TaskManager.Api.Mapping;
 using YardView.TaskManager.Server.Contracts.Tasks;
 using YardView.TaskManager.Server.Services;
 
@@ -12,8 +13,19 @@ public static class TaskEndpoints
         var group = app.MapGroup("/tasks")
                         .WithTags("Tasks");
 
-        group.MapGet("/", async (string? status, ITaskService taskService, CancellationToken ct) =>
+        group.MapGet("/", async (
+            string? status, 
+            ITaskService taskService, 
+            CancellationToken ct) =>
         {
+            if (!string.IsNullOrWhiteSpace(status) && !TaskStatusMapper.IsValid(status))
+            {
+                return Results.ValidationProblem(new Dictionary<string, string[]>
+                {
+                    ["status"] = new[] { "Status must be one of: todo, in_progress, done." }
+                });
+            }
+
             var tasks = await taskService.GetTasksAsync(status, ct);
             return Results.Ok(tasks);
         })
@@ -77,7 +89,7 @@ public static class TaskEndpoints
             var deleted = await taskService.DeleteAsync(id, ct);
             return deleted ? Results.NoContent() : Results.NotFound();
         })
-        .Produces(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status404NotFound);
 
         return app;
