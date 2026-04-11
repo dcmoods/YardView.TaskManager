@@ -14,7 +14,9 @@ import { CreateTaskRequest } from '../../../../core/services/task-api.service';
 })
 export class TaskFormComponent {
   @Input() isSaving = false;
+
   @Output() createTask = new EventEmitter<CreateTaskRequest>();
+  @Output() cancel = new EventEmitter<void>();
 
   @ViewChild('taskForm') taskForm?: NgForm;
 

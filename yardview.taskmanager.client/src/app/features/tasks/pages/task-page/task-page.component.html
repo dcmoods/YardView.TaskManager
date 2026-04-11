@@ -9,24 +9,14 @@
       </p>
     </header>
 
-    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-      
-      @if (createError) {
-        <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {{ createError }}
-        </div>
-      }
-      
-      <app-task-form
-        [isSaving]="isCreating"
-        (createTask)="onCreateTask($event)" />
-    </div>
-
-    <div class="flex justify-between items-center bg-white border rounded-xl p-4 shadow-sm">
-      <label class="text-sm font-medium text-slate-700">Filter</label>
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex justify-between items-center">
+      <div class="flex items-center gap-2">
+      <label class="text-sm font-medium text-slate-700">
+        Filter
+      </label>
 
       <select
-        class="border rounded-md px-3 py-2 text-sm"
+        class="border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
         [value]="selectedStatus"
         (change)="onFilterChange($any($event.target).value)">
         <option value="all">All</option>
@@ -36,12 +26,50 @@
       </select>
     </div>
 
-    @if (tasks$ | async; as tasks) {
-      <app-task-list 
-          [tasks]="tasks"
-          (statusChange)="onStatusChange($event)"
-          (deleteTask)="openDeleteDialog($event)" />
-    }
+    <button
+      type="button"
+      class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
+      (click)="openCreateForm()"
+      [disabled]="showCreateForm">
+      New Task
+    </button>
+  </div>
+    @if (showCreateForm) {
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
+          @if (createError) {
+            <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {{ createError }}
+            </div>
+          }
+
+          <app-task-form
+            [isSaving]="isCreating"
+            (createTask)="onCreateTask($event)"
+            (cancel)="closeCreateForm()" />
+        </div>
+      }
+
+      @if (loading$ | async) {
+        <div class="bg-white border border-slate-200 rounded-xl p-6 text-center text-slate-500 shadow-sm">
+          Loading tasks...
+        </div>
+      } @else if (error$ | async; as error) {
+        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center text-red-600 shadow-sm">
+          {{ error }}
+        </div>
+      } @else if (tasks$ | async; as tasks) {
+        @if (tasks.length === 0) {
+          <div class="bg-white border border-slate-200 rounded-xl p-6 text-center text-slate-500 shadow-sm">
+            No tasks found.
+          </div>
+        } @else {
+          <app-task-list
+            [tasks]="tasks"
+            (statusChange)="onStatusChange($event)"
+            (deleteTask)="openDeleteDialog($event)" />
+        }
+      }
+
 
   </div>
 </section>

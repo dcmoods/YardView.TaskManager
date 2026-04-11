@@ -95,7 +95,16 @@
     }
   </div>
 
-  <div class="flex justify-end pt-2">
+  <div class="flex justify-end gap-3 pt-2">
+
+    <button
+      type="button"
+      class="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
+      (click)="cancel.emit()"
+      [disabled]="isSaving">
+      Cancel
+    </button>
+    
     <button
       type="submit"
       [disabled]="isSaving" 

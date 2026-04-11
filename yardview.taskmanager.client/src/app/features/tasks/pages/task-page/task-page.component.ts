@@ -25,6 +25,7 @@ export class TaskPageComponent implements OnInit {
   loading$ = this.taskService.loading$;
   error$ = this.taskService.error$;
   
+  showCreateForm = false;
   isCreating = false;
   createError: string | null = null;
   
@@ -44,6 +45,15 @@ export class TaskPageComponent implements OnInit {
     this.load();
   }
 
+  openCreateForm() {
+    this.showCreateForm = true;
+  }
+
+  closeCreateForm() {
+    this.showCreateForm = false;
+    this.createError = null;
+  }
+
   onCreateTask(request: CreateTaskRequest): void {
     this.isCreating = true;
     this.createError = null;
@@ -51,6 +61,7 @@ export class TaskPageComponent implements OnInit {
     this.taskService.createTask(request).subscribe({
       next: () => {
         this.isCreating = false;
+        this.showCreateForm = false;
         this.taskFormComponent?.resetForm();
         this.toastService.success('Task created successfully!');
       },
