@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 
 @NgModule({
-  declarations: [App],
+  declarations: [App ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

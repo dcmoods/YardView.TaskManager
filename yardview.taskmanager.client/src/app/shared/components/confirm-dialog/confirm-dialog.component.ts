@@ -10,6 +10,8 @@ export class ConfirmDialogComponent {
   @Input() message = 'Are you sure?';
   @Input() confirmText = 'Confirm';
   @Input() cancelText = 'Cancel';
+  @Input() isLoading = false;
+  @Input() variant: 'danger' | 'primary' = 'primary';
 
   @Output() confirmed = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();

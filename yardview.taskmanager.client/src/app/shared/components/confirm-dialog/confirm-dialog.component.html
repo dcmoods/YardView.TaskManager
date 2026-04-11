@@ -20,9 +20,17 @@
 
         <button
           type="button"
-          class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition"
+          [disabled]="isLoading"
+          class="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition"
           (click)="confirmed.emit()"
+          [class.bg-red-600]="variant === 'danger'"
+          [class.hover:bg-red-700]="variant === 'danger'"
+          [class.bg-blue-600]="variant === 'primary'"
+          [class.hover:bg-blue-700]="variant === 'primary'"
         >
+          @if (isLoading) {
+            <span class="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"></span>
+          }
           {{ confirmText }}
         </button>
       </div>

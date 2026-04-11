@@ -2,17 +2,17 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CreateTaskRequest, TaskApiService, TaskFilter } from '../../../../core/services/task-api.service';
 import { Task, TaskStatus } from '../../../../core/models/task.model';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { BrowserModule } from '@angular/platform-browser';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
 import { AsyncPipe } from '@angular/common';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-task-page',
   standalone: true,
   templateUrl: './task-page.component.html',
-  imports: [ TaskListComponent, ConfirmDialogComponent, AsyncPipe, TaskFormComponent ],
+  imports: [ TaskListComponent, ConfirmDialogComponent, AsyncPipe, TaskFormComponent, LoadingSpinnerComponent ],
 })
 export class TaskPageComponent implements OnInit {
   
@@ -30,6 +30,8 @@ export class TaskPageComponent implements OnInit {
   createError: string | null = null;
   
   selectedStatus: TaskStatus | 'all' = 'all';
+  
+  isDeleting = false;
   taskPendingDelete: Task | null = null;
   
   ngOnInit(): void {
@@ -106,12 +108,15 @@ export class TaskPageComponent implements OnInit {
       return;
     }
 
+    this.isDeleting = true;
     this.taskService.deleteTask(this.taskPendingDelete.id).subscribe({
       next: () => {
         this.closeDeleteDialog();
+        this.isDeleting = false;
         this.toastService.success('Task deleted successfully!');
       },
       error: () => {
+        this.isDeleting = false;
         this.toastService.error('Failed to delete task.');
       },
     });
