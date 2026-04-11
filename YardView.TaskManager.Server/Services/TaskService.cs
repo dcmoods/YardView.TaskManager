@@ -38,7 +38,8 @@ public class TaskService : ITaskService
             Title = t.Title,
             Description = t.Description,
             Status = TaskStatusMapper.ToApiValue(t.Status),
-            CreatedAt = t.CreatedAt
+            CreatedAt = t.CreatedAt,
+            DueDate = t.DueDate,
         }).ToListAsync(cancellationToken);
 
     }
@@ -52,7 +53,8 @@ public class TaskService : ITaskService
             Title = task.Title,
             Description = task.Description,
             Status = TaskStatusMapper.ToApiValue(task.Status),
-            CreatedAt = task.CreatedAt
+            CreatedAt = task.CreatedAt,
+            DueDate = task.DueDate,
         };
     }
 
@@ -63,7 +65,8 @@ public class TaskService : ITaskService
             Title = request.Title,
             Description = request.Description,
             Status = TaskStatusMapper.ToEnum(request.Status),
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            DueDate = request.DueDate
         };
         
         _dbContext.Tasks.Add(task);
@@ -75,7 +78,8 @@ public class TaskService : ITaskService
             Title = task.Title,
             Description = task.Description,
             Status = task.Status.ToString(),
-            CreatedAt = task.CreatedAt
+            CreatedAt = task.CreatedAt,
+            DueDate = task.DueDate,
         };
     }
 
@@ -91,6 +95,7 @@ public class TaskService : ITaskService
         task.Title = request.Title;
         task.Status = TaskStatusMapper.ToEnum(request.Status);
         task.Description = request.Description;
+        task.DueDate = request.DueDate;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -100,7 +105,8 @@ public class TaskService : ITaskService
             Title = task.Title,
             Description = task.Description,
             Status = task.Status.ToString(),
-            CreatedAt = task.CreatedAt
+            CreatedAt = task.CreatedAt,
+            DueDate = task.DueDate,
         };
     }
 

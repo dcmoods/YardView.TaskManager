@@ -7,4 +7,5 @@ public class TaskItem
     public string? Description { get; set; }
     public TaskStatus Status { get; set; } = TaskStatus.Todo;
     public DateTime CreatedAt { get; set; }
+    public DateTime? DueDate { get; set; }
 }
