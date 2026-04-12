@@ -27,18 +27,11 @@ A simple full-stack task management application built with ASP.NET Core, SQLite,
 - Node.js
 - npm
 
-## Running the API
+## Running the API and UI
 
 ```bash
-cd src/YardView.TaskManager.Api
+cd YardView.TaskManager.Api
 dotnet restore
 dotnet ef database update
-dotnet run
-```
-
-## Running the UI
-```bash
-cd client/yardview-task-manager-ui
-npm install
-ng serve
+dotnet run --launch-profile=https
 ```
