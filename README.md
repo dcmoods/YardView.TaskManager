@@ -23,14 +23,14 @@ A simple full-stack task management application built with ASP.NET Core, SQLite,
 
 ## Prerequisites
 
-- .NET 8 SDK
+- .NET 10 SDK
 - Node.js
 - npm
 
-## Running the API and UI
+## Running the Server and UI
 
 ```bash
-cd YardView.TaskManager.Api
+cd YardView.TaskManager.Server
 dotnet restore
 dotnet ef database update
 dotnet run --launch-profile=https
