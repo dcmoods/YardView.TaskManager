@@ -79,7 +79,6 @@ app.UseAuthorization();
 app.UseCors("Frontend");
 
 app.MapTaskEndpoints();
-app.MapTaskStatusEndpoints();
 
 app.MapFallbackToFile("/index.html");
 

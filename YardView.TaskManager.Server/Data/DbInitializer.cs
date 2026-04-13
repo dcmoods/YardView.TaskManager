@@ -18,22 +18,32 @@ namespace YardView.TaskManager.Server.Data
                 {
                     Title = "Setup project",
                     Description = "Initialize API and Angular app",
+                    Status = Models.TaskStatus.Done,
+                    CreatedAt = DateTime.UtcNow,
+                },
+                new TaskItem
+                {
+                    Title = "Past Due Task",
+                    Description = "This task is late and should be completed ASAP.",
                     Status = Models.TaskStatus.Todo,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow.AddDays(-3),
+                    DueDate = DateTime.UtcNow.AddDays(-1)
                 },
                 new TaskItem
                 {
                     Title = "Build API",
                     Description = "Implement CRUD endpoints",
                     Status = Models.TaskStatus.InProgress,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    DueDate = DateTime.UtcNow.AddDays(3)
                 },
                 new TaskItem
                 {
                     Title = "Finish UI",
                     Description = "Connect frontend to API",
-                    Status = Models.TaskStatus.Done,
-                    CreatedAt = DateTime.UtcNow
+                    Status = Models.TaskStatus.Todo,
+                    CreatedAt = DateTime.UtcNow,
+                    DueDate = DateTime.UtcNow.AddDays(5)
                 }
             };
 

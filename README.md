@@ -27,11 +27,28 @@ A simple full-stack task management application built with ASP.NET Core, SQLite,
 - Node.js
 - npm
 
-## Running the Server and UI
+
+## Running with Visual Studio
+
+1. Open the solution in Visual Studio.
+2. Set `YardView.TaskManager.Server` as the startup project.
+3. Run the project with the `https` launch profile.
+4. The application will open in the browser at the configured HTTPS URL.
+
+If the database has not been created yet, run the following once from a terminal:
+
+```bash
+cd YardView.TaskManager.Server
+dotnet ef database update
+```
+
+## Running the Server and UI with CLI
 
 ```bash
 cd YardView.TaskManager.Server
 dotnet restore
 dotnet ef database update
 dotnet run --launch-profile=https
+
 ```
+Once both server and client start, open the SPA directly at: [https://localhost:64860/](https://localhost:64860/)
