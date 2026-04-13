@@ -33,8 +33,8 @@ export class TaskFormComponent {
 
     if (!this.title.trim()) {
       return;
+
     }
-    console.log(this.dueDate)
     this.createTask.emit({
       title: this.title.trim(),
       description: this.description.trim() || undefined,

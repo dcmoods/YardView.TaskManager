@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CreateTaskRequest, TaskApiService, TaskFilter } from '../../../../core/services/task-api.service';
 import { Task, TaskStatus } from '../../../../core/models/task.model';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -7,6 +7,7 @@ import { AsyncPipe } from '@angular/common';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { ToastService } from '../../../../core/services/toast.service';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-task-page',
@@ -14,10 +15,11 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
   templateUrl: './task-page.component.html',
   imports: [ TaskListComponent, ConfirmDialogComponent, AsyncPipe, TaskFormComponent, LoadingSpinnerComponent ],
 })
-export class TaskPageComponent implements OnInit {
+export class TaskPageComponent implements OnInit, OnDestroy {
   
   private readonly taskService = inject(TaskApiService);
   private readonly toastService = inject(ToastService);
+  private readonly destroy$ = new Subject<void>();
 
   @ViewChild(TaskFormComponent) taskFormComponent?: TaskFormComponent;
   
@@ -36,6 +38,11 @@ export class TaskPageComponent implements OnInit {
   
   ngOnInit(): void {
     this.load();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   load() {
@@ -60,19 +67,21 @@ export class TaskPageComponent implements OnInit {
     this.isCreating = true;
     this.createError = null;
     
-    this.taskService.createTask(request).subscribe({
-      next: () => {
-        this.isCreating = false;
-        this.showCreateForm = false;
-        this.taskFormComponent?.resetForm();
-        this.toastService.success('Task created successfully!');
-      },
-      error: () => {
-        this.isCreating = false;
-        this.createError = 'Failed to create task.';
-        this.toastService.error('Failed to create task.');
-      },
-    });
+    this.taskService.createTask(request)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isCreating = false;
+          this.showCreateForm = false;
+          this.taskFormComponent?.resetForm();
+          this.toastService.success('Task created successfully!');
+        },
+        error: () => {
+          this.isCreating = false;
+          this.createError = 'Failed to create task.';
+          this.toastService.error('Failed to create task.');
+        },
+      });
   }
 
   onStatusChange(event: { task: Task; status: TaskStatus }): void {
@@ -83,6 +92,7 @@ export class TaskPageComponent implements OnInit {
         status: event.status,
         dueDate: event.task.dueDate ?? null,
       })
+      .pipe(takeUntil(this.destroy$))
       .subscribe(
         {
           next: () => {
@@ -110,16 +120,18 @@ export class TaskPageComponent implements OnInit {
     }
 
     this.isDeleting = true;
-    this.taskService.deleteTask(this.taskPendingDelete.id).subscribe({
-      next: () => {
-        this.closeDeleteDialog();
-        this.isDeleting = false;
-        this.toastService.success('Task deleted successfully!');
-      },
-      error: () => {
-        this.isDeleting = false;
-        this.toastService.error('Failed to delete task.');
-      },
-    });
+    this.taskService.deleteTask(this.taskPendingDelete.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.closeDeleteDialog();
+          this.isDeleting = false;
+          this.toastService.success('Task deleted successfully!');
+        },
+        error: () => {
+          this.isDeleting = false;
+          this.toastService.error('Failed to delete task.');
+        },
+      });
   }
 }
