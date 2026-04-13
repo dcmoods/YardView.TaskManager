@@ -52,3 +52,8 @@ dotnet run --launch-profile=https
 
 ```
 Once both server and client start, open the SPA directly at: [https://localhost:64860/](https://localhost:64860/)
+
+## Notes
+
+- On first startup, the application may take longer to load while dependencies are restored and the Angular client is built.
+- Subsequent runs will be significantly faster.
